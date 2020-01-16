@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+import sys
 
 # Declare all the rooms
 
@@ -24,20 +26,22 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['foyer'].s_to = 'outside'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['overlook'].s_to = 'foyer'
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['treasure'].s_to = 'narrow'
 
 #
 # Main
 #
 
 # Make a new player object that is currently in the 'outside' room.
+
+player = Player("Ken", "outside")
 
 # Write a loop that:
 #
@@ -49,3 +53,31 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+while player:
+    print(room[player.room_key].name)
+    print(room[player.room_key].description)
+    action = input("Which direction do you want to go? Enter north, south, east, or west (q to quit): ")
+    if action == "north":
+        try:
+            player.room_key = room[player.room_key].n_to
+        except AttributeError:
+            print("Can't go that way. Try a different direction.")
+    if action == "south":
+        try:
+            player.room_key = room[player.room_key].s_to
+        except AttributeError:
+            print("Can't go that way. Try a different direction.")
+    if action == "east":
+        try:
+            player.room_key = room[player.room_key].e_to
+        except AttributeError:
+            print("Can't go that way. Try a different direction.")
+    if action == "west":
+        try:
+            player.room_key = room[player.room_key].w_to
+        except AttributeError:
+            print("Can't go that way. Try a different direction.")
+    if action == "q":
+        print("Thanks for playing!")
+        sys.exit()
